@@ -31,6 +31,12 @@ const STATUS_OPTIONS: Record<CanStatus, CanStatus[]> = {
   EMPTY: ["FULL", "HALF"],
 };
 
+const STATUS_OVERLAY_HEIGHT: Record<CanStatus, string> = {
+  FULL: "h-0",
+  HALF: "h-1/2",
+  EMPTY: "h-full",
+};
+
 export const MonsterCan = ({ index, status }: MonsterCanProps) => {
   const setCanStatus = useMonsterStore((s) => s.setCanStatus);
   const [open, setOpen] = useState(false);
@@ -47,16 +53,12 @@ export const MonsterCan = ({ index, status }: MonsterCanProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <div className="relative w-12">
+        <div className="relative w-12 overflow-hidden transition-transform duration-300 ease-out hover:-translate-y-1 active:scale-95">
           <Image src={fullCan} alt="" className="w-12 block" />
 
-          {status === "HALF" && (
-            <div className="absolute inset-0 bg-linear-to-b from-white/80 from-50% to-transparent to-50%" />
-          )}
-
-          {status === "EMPTY" && (
-            <div className="absolute inset-0 bg-white/80" />
-          )}
+          <div
+            className={`absolute left-0 top-0 w-full bg-white/80 transition-[height] duration-500 ease-out ${STATUS_OVERLAY_HEIGHT[status]}`}
+          />
         </div>
       </DialogTrigger>
 
