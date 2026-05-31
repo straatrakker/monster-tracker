@@ -19,16 +19,25 @@ interface MonsterCanProps {
   status: CanStatus;
 }
 
-const ALL_STATUSES: { value: CanStatus; label: string }[] = [
-  { value: "FULL", label: "Weer vol" },
-  { value: "HALF", label: "Voor de helft" },
-  { value: "EMPTY", label: "Helemaal op" },
-];
+const STATUS_LABELS: Record<CanStatus, string> = {
+  FULL: "Weer vol",
+  HALF: "Voor de helft",
+  EMPTY: "Helemaal op",
+};
+
+const STATUS_OPTIONS: Record<CanStatus, CanStatus[]> = {
+  FULL: ["EMPTY", "HALF"],
+  HALF: ["EMPTY", "FULL"],
+  EMPTY: ["FULL", "HALF"],
+};
 
 export const MonsterCan = ({ index, status }: MonsterCanProps) => {
   const setCanStatus = useMonsterStore((s) => s.setCanStatus);
   const [open, setOpen] = useState(false);
-  const otherStatuses = ALL_STATUSES.filter((s) => s.value !== status);
+  const otherStatuses = STATUS_OPTIONS[status].map((value) => ({
+    value,
+    label: STATUS_LABELS[value],
+  }));
 
   const handleSelect = (newStatus: CanStatus) => {
     setCanStatus(index, newStatus);
@@ -57,8 +66,12 @@ export const MonsterCan = ({ index, status }: MonsterCanProps) => {
           <DialogDescription>Tuurlijk was het lekker...</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2">
-          {otherStatuses.map((s) => (
-            <Button key={s.value} onClick={() => handleSelect(s.value)}>
+          {otherStatuses.map((s, i) => (
+            <Button
+              key={s.value}
+              variant={i === 0 ? "default" : "secondary"}
+              onClick={() => handleSelect(s.value)}
+            >
               {s.label}
             </Button>
           ))}
