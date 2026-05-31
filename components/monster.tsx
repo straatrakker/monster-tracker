@@ -14,7 +14,15 @@ interface MonsterCanProps {
   status: "FULL" | "HALF" | "EMPTY";
 }
 
+const ALL_STATUSES: { value: "FULL" | "HALF" | "EMPTY"; label: string }[] = [
+  { value: "FULL", label: "Weer vol" },
+  { value: "HALF", label: "Voor de helft" },
+  { value: "EMPTY", label: "Helemaal op" },
+];
+
 export const MonsterCan = ({ status }: MonsterCanProps) => {
+  const otherStatuses = ALL_STATUSES.filter((s) => s.value !== status);
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -37,9 +45,9 @@ export const MonsterCan = ({ status }: MonsterCanProps) => {
           <DialogDescription>Tuurlijk was het lekker...</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2">
-          <Button>Helemaal</Button>
-          <Button>Half</Button>
-          <Button>Leeg</Button>
+          {otherStatuses.map((s) => (
+            <Button key={s.value}>{s.label}</Button>
+          ))}
         </div>
       </DialogContent>
     </Dialog>
