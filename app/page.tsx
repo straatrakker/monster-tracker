@@ -26,18 +26,36 @@ export default function Home() {
   if (!_hydrated) return null;
 
   return (
-    <main className="container mx-auto p-4 flex flex-col flex-1">
-      <div className="flex-1">
-        <div className="grid grid-cols-6 gap-4 h-full">
+    <main className="container mx-auto flex flex-1 flex-col gap-6 p-4 sm:p-6">
+      <div className="flex-1 space-y-6">
+        <header className="space-y-2 border-b pb-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+            Maandvoorraad
+          </p>
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">
+              Monster Tracker
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {cans.length - totalDrunk} van de {cans.length} blikjes over
+            </p>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-6 gap-4">
           {cans.map((status, i) => (
             <MonsterCan key={i} index={i} status={status} />
           ))}
         </div>
 
-        <div className="mt-4">
-          <h2 className="scroll-m-20 border-t pt-4 text-xl font-semibold tracking-tight first:mt-0">
-            Totaal opgeslurpt: {totalDrunk} blikjes
-          </h2>
+        <div className="rounded-2xl bg-secondary p-4">
+          <p className="text-sm font-medium text-muted-foreground">
+            Totaal opgeslurpt
+          </p>
+          <p className="mt-1 font-heading text-3xl font-semibold tracking-tight">
+            {totalDrunk}{" "}
+            {totalDrunk === 1 || totalDrunk === 0.5 ? "blikje" : "blikjes"}
+          </p>
         </div>
       </div>
 
