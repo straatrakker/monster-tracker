@@ -1,3 +1,5 @@
+"use client";
+
 import { MonsterCan } from "@/components/monster";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,20 +10,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-const MONTHLY_MONSTER_AMOUNT = 18;
+import { useMonsterStore } from "@/store/useMonsterStore";
 
 export default function Home() {
+  const { cans, resetAll, _hydrated } = useMonsterStore();
+  const totalDrunk = cans.reduce((total, status) => {
+    if (status === "EMPTY") return total + 1;
+    if (status === "HALF") return total + 0.5;
+    return total;
+  }, 0);
+
+  if (!_hydrated) return null;
+
   return (
     <main className="container mx-auto p-4 flex flex-col flex-1">
       <div className="flex-1">
         <div className="grid grid-cols-6 gap-4 h-full">
-          {Array.from({ length: MONTHLY_MONSTER_AMOUNT }, (_, i) => {
-            const status = i < 5 ? "FULL" : i < 10 ? "HALF" : "EMPTY";
-            return <MonsterCan key={i} status={status} />;
-          })}
+          {cans.map((status, i) => (
+            <MonsterCan key={i} index={i} status={status} />
+          ))}
         </div>
-        <h2>Totaal gedronken: {MONTHLY_MONSTER_AMOUNT - 4}</h2>
+        <h2>Totaal gedronken: {totalDrunk}</h2>
       </div>
 
       <Dialog>
@@ -36,7 +45,7 @@ export default function Home() {
           </DialogHeader>
 
           <div className="grid grid-cols-2">
-            <Button>Ja! 😍</Button>
+            <Button onClick={resetAll}>Ja! 😍</Button>
             <Button variant="secondary">Nee! 😭</Button>
           </div>
         </DialogContent>

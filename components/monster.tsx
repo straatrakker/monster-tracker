@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import fullCan from "@/public/full-can.png";
 import {
@@ -9,22 +11,32 @@ import {
   DialogDescription,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
+import { useMonsterStore, type CanStatus } from "@/store/useMonsterStore";
+import { useState } from "react";
 
 interface MonsterCanProps {
-  status: "FULL" | "HALF" | "EMPTY";
+  index: number;
+  status: CanStatus;
 }
 
-const ALL_STATUSES: { value: "FULL" | "HALF" | "EMPTY"; label: string }[] = [
+const ALL_STATUSES: { value: CanStatus; label: string }[] = [
   { value: "FULL", label: "Weer vol" },
   { value: "HALF", label: "Voor de helft" },
   { value: "EMPTY", label: "Helemaal op" },
 ];
 
-export const MonsterCan = ({ status }: MonsterCanProps) => {
+export const MonsterCan = ({ index, status }: MonsterCanProps) => {
+  const setCanStatus = useMonsterStore((s) => s.setCanStatus);
+  const [open, setOpen] = useState(false);
   const otherStatuses = ALL_STATUSES.filter((s) => s.value !== status);
 
+  const handleSelect = (newStatus: CanStatus) => {
+    setCanStatus(index, newStatus);
+    setOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <div className="relative w-12">
           <Image src={fullCan} alt="" className="w-12 block" />
@@ -46,7 +58,9 @@ export const MonsterCan = ({ status }: MonsterCanProps) => {
         </DialogHeader>
         <div className="grid grid-cols-2">
           {otherStatuses.map((s) => (
-            <Button key={s.value}>{s.label}</Button>
+            <Button key={s.value} onClick={() => handleSelect(s.value)}>
+              {s.label}
+            </Button>
           ))}
         </div>
       </DialogContent>
