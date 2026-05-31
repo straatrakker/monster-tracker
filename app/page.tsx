@@ -26,7 +26,7 @@ export default function Home() {
   if (!_hydrated) return null;
 
   return (
-    <main className="container mx-auto flex flex-1 flex-col gap-6 p-4 sm:p-6">
+    <main className="container mx-auto flex flex-1 flex-col gap-6 p-6 pb-12">
       <div className="flex-1 space-y-6">
         <header className="space-y-2 border-b pb-5">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
