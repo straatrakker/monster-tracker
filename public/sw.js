@@ -1,5 +1,11 @@
 const CACHE_NAME = "monster-tracker-v1";
-const APP_SHELL = ["/", "/icon.svg", "/full-can.png"];
+const APP_SHELL = [
+  "/",
+  "/icon.svg",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/full-can.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
