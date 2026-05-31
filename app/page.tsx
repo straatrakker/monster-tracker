@@ -1,4 +1,5 @@
 import { MonsterCan } from "@/components/monster";
+import { Button } from "@/components/ui/button";
 
 const MONTHLY_MONSTER_AMOUNT = 18;
 
@@ -9,6 +10,8 @@ export default function Home() {
         const status = i < 5 ? "FULL" : i < 10 ? "HALF" : "EMPTY";
         return <MonsterCan key={i} status={status} />;
       })}
+
+      <Button>Hey</Button>
     </div>
   );
 }
