@@ -11,8 +11,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useMonsterStore } from "@/store/useMonsterStore";
+import { useState } from "react";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
+
   const { cans, resetAll, _hydrated } = useMonsterStore();
   const totalDrunk = cans.reduce((total, status) => {
     if (status === "EMPTY") return total + 1;
@@ -30,10 +33,15 @@ export default function Home() {
             <MonsterCan key={i} index={i} status={status} />
           ))}
         </div>
-        <h2>Totaal gedronken: {totalDrunk}</h2>
+
+        <div className="mt-4">
+          <h2 className="scroll-m-20 border-t pt-4 text-xl font-semibold tracking-tight first:mt-0">
+            Totaal opgeslurpt: {totalDrunk} blikjes
+          </h2>
+        </div>
       </div>
 
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>Alles weer vol</Button>
         </DialogTrigger>
@@ -45,8 +53,17 @@ export default function Home() {
           </DialogHeader>
 
           <div className="grid grid-cols-2">
-            <Button onClick={resetAll}>Ja! 😍</Button>
-            <Button variant="secondary">Nee! 😭</Button>
+            <Button
+              onClick={() => {
+                resetAll();
+                setOpen(false);
+              }}
+            >
+              Ja! 😍
+            </Button>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              Nee! 😭
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
